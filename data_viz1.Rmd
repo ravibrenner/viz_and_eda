@@ -27,3 +27,26 @@ weather_df <-
   select(name, id, everything())
 ```
 
+Making a plot
+
+```{r}
+weather_df |>
+  ggplot()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
