@@ -1,15 +1,10 @@
----
-title: "Viz 1"
-output: github_document
-date: "2024-09-26"
----
-
-```{r setup, include=FALSE}
-library(tidyverse)
-```
+Viz 1
+================
+2024-09-26
 
 Import the weather data
-```{r, message=FALSE}
+
+``` r
 weather_df <- 
   rnoaa::meteo_pull_monitors(
     c("USW00094728", "USW00022534", "USS0023B17S"),
@@ -29,35 +24,22 @@ weather_df <-
 
 Making a plot
 
-```{r}
+``` r
 weather_df |>
   ggplot(aes(x = tmin, y = tmax)) + 
   geom_point()
 ```
 
+    ## Warning: Removed 17 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
+![](data_viz1_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
 saving it to a variable
 
-```{r}
+``` r
 ggp_weather_scatterplot <- 
   weather_df |> 
   ggplot(aes(x = tmin, y = tmax)) + 
   geom_point()
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
