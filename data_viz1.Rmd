@@ -6,6 +6,7 @@ date: "2024-09-26"
 
 ```{r setup, include=FALSE}
 library(tidyverse)
+library(ggridges)
 ```
 
 Import the weather data
@@ -100,12 +101,111 @@ weather_df |>
   geom_smooth(method = "lm")
 ```
 
+## Small things
 
+```{r}
+weather_df |> 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_hex()
+```
 
+there is no variable "blue", so putting color = "blue" in ggplot(aes()) does not work out
+```{r}
+weather_df |>
+  ggplot(aes(x = tmin, y = tmax,color = "blue")) + 
+  geom_point()
+```
 
+This will work:
+```{r}
+weather_df |>
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(color = "blue")
+```
 
+## Univariate plots
 
+```{r}
+weather_df |>
+  ggplot(aes(x = tmin, fill = name)) +
+  geom_histogram(position = "dodge")
+```
 
+How to fix this/make it better? Maybe facet?
 
+Also not great, but better
+```{r}
+weather_df |>
+  ggplot(aes(x = tmin, fill = name)) + 
+  geom_histogram() +
+  facet_grid(.~name)
+```
 
+Maybe a density plot?
+```{r}
+weather_df |>
+  ggplot(aes(x = tmin, fill = name)) + 
+  geom_density(alpha = 0.3)
+```
+
+boxplots
+```{r}
+weather_df |>
+  ggplot(aes(x = name, y = tmin)) + 
+  geom_boxplot()
+```
+
+try violin plots
+```{r}
+weather_df |>
+  ggplot(aes(x = name, y = tmin, fill = name)) + 
+  geom_violin()
+```
+
+Another option: ridge plot
+```{r}
+weather_df |>
+  ggplot(aes(x = tmin, y = name)) + 
+  geom_density_ridges()
+```
+
+Make plots that compare precipitation across locations. Try a histogram, a density plot, a boxplot, a violin plot, and a ridgeplot; use aesthetic mappings to make your figure readable.
+```{r}
+weather_df |>
+  ggplot(aes(x = prcp, fill = name)) + 
+  geom_density(alpha = 0.3)
+```
+
+```{r}
+weather_df |>
+  ggplot(aes(x = name, y = prcp, fill = name)) + 
+  geom_violin()
+```
+
+```{r}
+weather_df |>
+  ggplot(aes(x = prcp, y = name)) + 
+  geom_density_ridges()
+```
+
+None of these options look to good, maybe if we removed 0 precip days?
+
+```{r}
+weather_df |>
+  filter(prcp > 0) |>
+  ggplot(aes(x = prcp, y = name)) + 
+  geom_density_ridges()
+```
+
+## saving and embedding plots
+
+```{r}
+ggp_weather <- weather_df |>
+  ggplot(aes(x = date, y= tmax, color = name)) +
+  geom_point()
+
+ggsave("plots/ggp_weather.pdf",ggp_weather, width = 8, height = 6)
+```
+
+Embedding plots
 
