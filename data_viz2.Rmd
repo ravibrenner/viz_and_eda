@@ -39,3 +39,33 @@ weather_df |>
        caption = "Weather data taken from rnoaa package for 3 stations.")
 ```
 
+Scales -- start with `x` and `y` and then do `color`
+```{r}
+weather_df |>
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = 0.3) + 
+  labs(title = "Temperature scatterplot",
+       x = "Minimum temp (C)",
+       y = "Maximum temp (C)",
+       color = "Location",
+       caption = "Weather data taken from rnoaa package for 3 stations.") + 
+  scale_x_continuous(breaks = c(-15,0,20),
+                     labels = c("-15C","0C","20C")) + 
+  scale_y_continuous(limits = c(0,30),
+                     transform = "sqrt") 
+```
+
+Look at color
+
+```{r}
+weather_df |>
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = 0.3) + 
+  labs(title = "Temperature scatterplot",
+       x = "Minimum temp (C)",
+       y = "Maximum temp (C)",
+       color = "Location",
+       caption = "Weather data taken from rnoaa package for 3 stations.") +
+  viridis::scale_color_viridis(discrete = TRUE)
+```
+
