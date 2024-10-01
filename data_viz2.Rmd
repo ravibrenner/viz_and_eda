@@ -227,14 +227,15 @@ litters_df <- read_csv("data/FAS_litters.csv",
 fas_df <- inner_join(pups_df,litters_df, by = "litter_number") |>
   pivot_longer(cols = pd_ears:pd_walk,
                names_to = "outcome",
-               values_to = "pd",
-               names_prefix = "pd_")
+               values_to = "pn_day",
+               names_prefix = "pd_") 
 ```
 
 plotting
 ```{r}
 fas_df |>
-  ggplot(aes(x = treatment,y = pd)) +
+  drop_na(treatment) |>
+  ggplot(aes(x = treatment,y = pn_day)) +
   geom_boxplot() +
   facet_grid(day ~ outcome)
 ```
