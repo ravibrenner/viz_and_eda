@@ -58,7 +58,7 @@ weather_df |>
 Look at color
 
 ```{r}
-weather_df |>
+ggp_scatterplot <- weather_df |>
   ggplot(aes(x = tmin, y = tmax, color = name)) + 
   geom_point(alpha = 0.3) + 
   labs(title = "Temperature scatterplot",
@@ -66,6 +66,39 @@ weather_df |>
        y = "Maximum temp (C)",
        color = "Location",
        caption = "Weather data taken from rnoaa package for 3 stations.") +
-  viridis::scale_color_viridis(discrete = TRUE)
+  viridis::scale_color_viridis(discrete = TRUE) 
 ```
 
+## Themes
+
+```{r}
+ggp_scatterplot + 
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
+
+Order matters here
+```{r}
+ggp_scatterplot + 
+  theme(legend.position = "bottom") +
+  theme_bw() 
+```
+
+some other themes
+```{r}
+ggp_scatterplot + 
+  theme(legend.position = "bottom") +
+  theme_minimal() 
+```
+
+```{r}
+ggp_scatterplot + 
+  theme(legend.position = "bottom") +
+  theme_classic() 
+```
+
+```{r}
+ggp_scatterplot + 
+  theme(legend.position = "bottom") +
+  ggthemes::theme_economist() 
+```
