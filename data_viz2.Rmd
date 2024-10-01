@@ -155,5 +155,14 @@ ggp_tmax_density <- weather_df |>
   ggplot(aes(x = tmax, fill = name)) + 
   geom_density(alpha = 0.3)
 
-```
+ggp_tmax_date <- weather_df |>
+  ggplot(aes(x = date, y = tmax, color = name)) + 
+  geom_point() + 
+  geom_smooth()
 
+(ggp_max_min + ggp_tmax_density) / ggp_tmax_date
+
+ggpubr::ggarrange(ggp_max_min,ggp_tmax_density, ggp_tmax_date,
+                  common.legend = TRUE)
+```
+Could add titles, combine legends, etc.
