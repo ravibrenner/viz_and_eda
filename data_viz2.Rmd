@@ -6,6 +6,7 @@ date: "2024-10-01"
 
 ```{r setup, include = FALSE}
 library(tidyverse)
+library(patchwork)
 ```
 
 Import the weather data
@@ -102,3 +103,57 @@ ggp_scatterplot +
   theme(legend.position = "bottom") +
   ggthemes::theme_economist() 
 ```
+
+Revisit the plot showing tmax against date for each location. Use labels, scale options, and theme changes to improve the readability of this plot
+```{r}
+weather_df |>
+  ggplot(aes(x = date, y = tmax, color = name, size = prcp)) + 
+  geom_point(alpha = 0.3) + 
+  #geom_smooth(se = FALSE) +
+  labs(title = "Max temp by date",
+       x = "Date",
+       y = "Max temperature (C)",
+       color = "Location",
+       size = "Precipitation") +
+  scale_color_viridis_d() +
+  theme_bw() + 
+  theme(legend.position = "bottom")
+```
+
+Extra bonus stuff in `ggplot`
+
+use different datasets in different geoms
+```{r}
+central_park_df <- weather_df |>
+  filter(name == "CentralPark_NY")
+
+molokai_df <- weather_df |>
+  filter(name == "Molokai_HI")
+
+molokai_df |>
+  ggplot(aes(x = date, y = tmax)) + 
+  geom_point() + 
+  geom_line(data = central_park_df)
+```
+
+## Multiple panels
+```{r}
+weather_df |>
+  ggplot(aes(x = tmax, fill = name)) + 
+  geom_density() + 
+  facet_grid(. ~ name)
+```
+
+combining different plots
+
+```{r}
+ggp_max_min <- weather_df |>
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.3)
+
+ggp_tmax_density <- weather_df |>
+  ggplot(aes(x = tmax, fill = name)) + 
+  geom_density(alpha = 0.3)
+
+```
+
