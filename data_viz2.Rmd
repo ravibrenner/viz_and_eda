@@ -26,3 +26,16 @@ weather_df <-
     tmax = tmax / 10) |>
   select(name, id, everything())
 ```
+
+Make a fancy scatterplot: add labels
+```{r}
+weather_df |>
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = 0.3) + 
+  labs(title = "Temperature scatterplot",
+       x = "Minimum temp (C)",
+       y = "Maximum temp (C)",
+       color = "Location",
+       caption = "Weather data taken from rnoaa package for 3 stations.")
+```
+
