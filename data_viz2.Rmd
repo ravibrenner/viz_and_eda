@@ -188,7 +188,54 @@ Could add titles, combine legends, etc.
 
 ```{r}
 weather_df |>
+  mutate(name = fct_relevel(name, c("Molokai_HI","CentralPark_NY","Waterhole_WA"))) |>
   ggplot(aes(x = name, y = tmax, fill = name)) + 
   geom_violin(alpha = 0.5)
+```
+
+Pulse data next
+```{r}
+pulse_df <- haven::read_sas("data/public_pulse_data.sas7bdat") |>
+  janitor::clean_names() |>
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit",
+    values_to = "bdi_score",
+    names_prefix = "bdi_score_")  |>
+  mutate(visit = if_else(visit == "bl","00m",visit))
+
+pulse_df |>
+  ggplot(aes(x = visit, y = bdi_score)) + 
+  geom_boxplot()
+```
+
+pups and litters data
+```{r}
+pups_df <- read_csv("data/FAS_pups.csv",
+                     na = c("NA", ".", "")) |>
+  janitor::clean_names() |>
+  mutate(sex = case_match(sex, 
+                          1 ~ "male", 
+                          2 ~ "female"))
+
+litters_df <- read_csv("data/FAS_litters.csv",
+                       na = c("NA",".","")) |>
+  janitor::clean_names() |>
+  separate(group, into = c("treatment","day"),sep = 3)
+
+
+fas_df <- inner_join(pups_df,litters_df, by = "litter_number") |>
+  pivot_longer(cols = pd_ears:pd_walk,
+               names_to = "outcome",
+               values_to = "pd",
+               names_prefix = "pd_")
+```
+
+plotting
+```{r}
+fas_df |>
+  ggplot(aes(x = treatment,y = pd)) +
+  geom_boxplot() +
+  facet_grid(day ~ outcome)
 ```
 
