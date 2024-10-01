@@ -9,6 +9,26 @@ library(tidyverse)
 library(patchwork)
 ```
 
+Dr. Goldsmith uses this chunk at the top of all his docs to set the defaults
+```{r, eval=FALSE}
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+
 Import the weather data
 ```{r, message=FALSE}
 weather_df <- 
@@ -161,8 +181,14 @@ ggp_tmax_date <- weather_df |>
   geom_smooth()
 
 (ggp_max_min + ggp_tmax_density) / ggp_tmax_date
-
-ggpubr::ggarrange(ggp_max_min,ggp_tmax_density, ggp_tmax_date,
-                  common.legend = TRUE)
 ```
 Could add titles, combine legends, etc.
+
+## Data manipulation
+
+```{r}
+weather_df |>
+  ggplot(aes(x = name, y = tmax, fill = name)) + 
+  geom_violin(alpha = 0.5)
+```
+
